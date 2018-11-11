@@ -16,13 +16,14 @@ public class Pacman {
 	private double y = 433;
 	private double xa = 0;
 	private double ya = 0;
-	
-	private double speed=2;
+		
+	private double speed=3;
 	private Game game;
 	BufferedImage pacman_image;
 	
 	private Vector<Rectangle> bounds;
 	PacDots pac_dots = new PacDots();
+	Fruit fruit = new Fruit();
 	
 	public Pacman(Game game) {
 		this.game = game;
@@ -42,7 +43,7 @@ public class Pacman {
 	}
 	
 	public void move() {
-		if(!collision()){
+		if(!wall_collision()){
 			if(x + xa <= 17 && y + ya >= 240 && y + ya < 290){
 				x = 430 + xa;
 				y = y + ya;
@@ -58,6 +59,7 @@ public class Pacman {
 				y = y + ya;
 			}
 		}
+		eat_dot((int)x, (int)y);
 	}
 	
 	public void keyPressed(KeyEvent e) {
@@ -65,6 +67,8 @@ public class Pacman {
 			System.out.println(x);
 			System.out.println(y);
 			System.out.println("");
+			pac_dots.getPac_dots().get(0).set_is_power(true);
+			fruit.setIs_on(true);
 		}
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			xa = speed*-1;
@@ -84,7 +88,19 @@ public class Pacman {
 		}
 	}
 	
-	private boolean collision() {
+	private void eat_dot(int x, int y) {
+		if(new Rectangle(x, y, 20, 20).intersects(new Rectangle(220, 290, 30, 30)) && fruit.get_is_on()) {
+			fruit.setIs_on(false);
+		}else {
+			for(int i=0; i<pac_dots.getPac_dots().size(); i++) {
+				if(new Rectangle(x, y, 20, 20).intersects(new Rectangle(pac_dots.getPac_dots().get(i).getPos_x(), pac_dots.getPac_dots().get(i).getPos_y(), 20, 20))){
+					pac_dots.getPac_dots().get(i).setEated(true);
+				}
+			}
+		}
+	}
+	
+	private boolean wall_collision() {
 		for(int i=0; i<bounds.size(); i++) {
 			if(bounds.get(i).intersects(getBounds())) {
 				return true;
@@ -100,6 +116,7 @@ public class Pacman {
 	public void paint(Graphics2D g){
 		g.drawImage(pacman_image, (int ) x, (int) y, null);
 		pac_dots.paint(g);
+		fruit.paint(g);
 	}
 	
 	public void set_speed(int speed) {

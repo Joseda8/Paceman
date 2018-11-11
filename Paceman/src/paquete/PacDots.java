@@ -11,12 +11,18 @@ public class PacDots {
 	
 	private ArrayList<PacDot> pac_dots = new ArrayList<PacDot>();
 	private Vector<Rectangle> bounds;
-
+	private int num_dots;
+	
 	public void paint(Graphics2D g){
-		g.setColor(new Color(255, 255, 15));
 		for(int i=0; i<pac_dots.size(); i++) {
 			if(!pac_dots.get(i).isEated()) {
-				g.fillOval(pac_dots.get(i).getPos_x(), pac_dots.get(i).getPos_y(), 20, 20);
+				if(pac_dots.get(i).is_power()) {
+					g.setColor(new Color(255, 50, 0));
+					g.fillOval(pac_dots.get(i).getPos_x(), pac_dots.get(i).getPos_y(), 20, 20);
+				}else {
+					g.setColor(new Color(255, 255, 50));
+					g.fillOval(pac_dots.get(i).getPos_x(), pac_dots.get(i).getPos_y(), 20, 20);
+				}
 			}
 		}
 	}
@@ -24,11 +30,12 @@ public class PacDots {
 	public void set_dots() {
 		for(int i=0; i<13; i++) {
 			for(int j=0; j<17; j++) {
-				if(!collision(i*35+10, j*35+10) && !(i*35+10 == 220 && j*35+10 == 430)) {
+				if(!collision(i*35+10, j*35+10) && !(i*35+10 == 220 && (j*35+10 == 430 || j*35+10 == 290))) {
 					pac_dots.add(new PacDot(i*35+10, j*35+10));
 				}
 			}
 		}
+		setNum_dots(pac_dots.size());
 	}
 	
 	private boolean collision(int x, int y) {
@@ -51,5 +58,15 @@ public class PacDots {
 	public ArrayList<PacDot> getPac_dots() {
 		return pac_dots;
 	}
+
+	public int getNum_dots() {
+		return num_dots;
+	}
+
+	public void setNum_dots(int num_dots) {
+		this.num_dots = num_dots;
+	}
+	
+	
 	
 }
