@@ -7,17 +7,19 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel {
 	
 	private Vector<Rectangle> bounds;
-	
 	Pacman pacman = new Pacman(this);
+	ArrayList<Ghost> ghosts = new ArrayList<Ghost>();
 
 	public Game() {
 		addKeyListener(new KeyListener() {
@@ -27,6 +29,7 @@ public class Game extends JPanel {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
+				//pacman.keyReleased(e);
 			}
 
 			@Override
@@ -37,12 +40,19 @@ public class Game extends JPanel {
 				pacman.keyPressed(e);
 			}
 		});
+		this.ghosts.add(new Ghost(this, 0));
+		this.ghosts.add(new Ghost(this, 1));
+		this.ghosts.add(new Ghost(this, 2));
+		this.ghosts.add(new Ghost(this, 3));
 		this.bounds=set_bounds();
 		setFocusable(true);
 	}
 	
 	private void move() {
 		pacman.move();
+		for(int i=0; i<ghosts.size(); i++) {
+			ghosts.get(i).move();
+		}
 	}
 	
 	
@@ -60,6 +70,13 @@ public class Game extends JPanel {
 			g2d.draw(bounds.get(i));
 		}
 		pacman.paint(g2d);
+		paint_ghosts(g2d);
+	}
+	
+	private void paint_ghosts(Graphics2D g2d) {
+		for(int i=0; i<ghosts.size(); i++) {
+			ghosts.get(i).paint(g2d);
+		}
 	}
 
 	public Vector<Rectangle> set_bounds(){
@@ -161,6 +178,11 @@ public class Game extends JPanel {
 		
 		return bounds;
 	}
+	
+	public void game_over() {
+		JOptionPane.showMessageDialog(this, "Game Over", null, JOptionPane.YES_NO_OPTION);
+		System.exit(0);
+	}
 
 	public static void main(String[] args) throws InterruptedException {
 		JFrame frame = new JFrame("Paceman");
@@ -177,5 +199,4 @@ public class Game extends JPanel {
 			Thread.sleep(10);
 		}
 	}
-
 }

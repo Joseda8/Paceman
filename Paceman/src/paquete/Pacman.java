@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 public class Pacman {
 	private double x = 223;
@@ -16,7 +17,7 @@ public class Pacman {
 	private double xa = 0;
 	private double ya = 0;
 		
-	private double speed=3;
+	private double speed=2;
 	private Game game;
 	BufferedImage pacman_image;
 	
@@ -41,7 +42,7 @@ public class Pacman {
 		pacman_image = ImageIO.read(new File("C:/Users/jdmon/OneDrive/Escritorio/Paceman File/Paceman/src/paquete/pacman.png"));
 	}
 	
-	public void move() {
+	public void move(){
 		if(!wall_collision()){
 			if(x + xa <= 17 && y + ya >= 240 && y + ya < 290){
 				x = 430 + xa;
@@ -59,12 +60,13 @@ public class Pacman {
 			}
 		}
 		eat_dot((int)x, (int)y);
+		ghost_collision();
 	}
 	
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			System.out.println(x);
-			System.out.println(y);
+			System.out.println(((int)x)/35);
+			System.out.println(((int)y)/35);
 			System.out.println("");
 			pac_dots.getPac_dots().get(0).set_is_power(true);
 			fruit.setIs_on(true);
@@ -87,6 +89,11 @@ public class Pacman {
 		}
 	}
 	
+	public void keyReleased(KeyEvent e) {
+		xa = 0;
+		ya = 0;
+	}
+	
 	private void eat_dot(int x, int y) {
 		if(new Rectangle(x, y, 20, 20).intersects(new Rectangle(220, 290, 30, 30)) && fruit.get_is_on()) {
 			fruit.setIs_on(false);
@@ -97,6 +104,16 @@ public class Pacman {
 				}
 			}
 		}
+	}
+	
+	private boolean ghost_collision() {
+		for(int i=0; i<game.ghosts.size(); i++) {
+			if(new Rectangle((int)game.ghosts.get(i).getX(), (int)game.ghosts.get(i).getY(), 15, 15).intersects(getBounds())) {
+				game.game_over();
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private boolean wall_collision() {
@@ -121,4 +138,16 @@ public class Pacman {
 	public void set_speed(int speed) {
 		this.speed = speed;
 	}
+
+	public double getX() {
+		return x;
+		//return ((int)x)/35;
+	}
+
+	public double getY() {
+		return y;
+		//return ((int)y)/35;
+	}
+	
+	
 }
