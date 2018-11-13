@@ -19,7 +19,10 @@ import javax.swing.JPanel;
 public class Game extends JPanel {
 	
 	private Vector<Rectangle> bounds;
-	Pacman pacman = new Pacman(this);
+	Pacman pacman;
+	PacDots pac_dots = new PacDots();
+	Fruit fruit = new Fruit();
+	
 	ArrayList<Ghost> ghosts = new ArrayList<Ghost>();
 	
 	private int score = 0;
@@ -48,6 +51,7 @@ public class Game extends JPanel {
 		this.ghosts.add(new Ghost(this, 2));
 		this.ghosts.add(new Ghost(this, 3));
 		this.bounds=set_bounds();
+		pacman = new Pacman(this);
 		setFocusable(true);
 	}
 	
@@ -73,6 +77,8 @@ public class Game extends JPanel {
 			g2d.draw(bounds.get(i));
 		}
 		pacman.paint(g2d);
+		pac_dots.paint(g2d);
+		fruit.paint(g2d);
 		paint_ghosts(g2d);
 		paint_score(g2d);
 	}

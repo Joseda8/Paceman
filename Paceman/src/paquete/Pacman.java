@@ -25,12 +25,14 @@ public class Pacman {
 	private boolean power_on=false;
 	
 	private Vector<Rectangle> bounds;
-	PacDots pac_dots = new PacDots();
-	Fruit fruit = new Fruit();
+	PacDots pac_dots;
+	Fruit fruit;
 	
 	public Pacman(Game game) {
 		this.game = game;
 		this.bounds = game.set_bounds();
+		this.pac_dots=game.pac_dots;
+		this.fruit=game.fruit;
 		pac_dots.setBounds(bounds);
 		pac_dots.set_dots();
 		
@@ -154,8 +156,6 @@ public class Pacman {
 
 	public void paint(Graphics2D g){
 		g.drawImage(pacman_image, (int ) x, (int) y, null);
-		pac_dots.paint(g);
-		fruit.paint(g);
 	}
 	
 	public void set_speed(int speed) {
