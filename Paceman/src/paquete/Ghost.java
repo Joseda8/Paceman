@@ -11,9 +11,13 @@ import javax.imageio.ImageIO;
 
 public class Ghost extends GhostBacktracking {
 	private double x = 193;
-	private double y = 225;
+	private double y = 224;
 	private double xa = 0;
 	private double ya = 0;
+	
+	private int width_ghost=25;
+	private int heigth_ghost=25;
+	
 	private int ghost_num;
 	
 	private int count_control_move_var;
@@ -38,7 +42,7 @@ public class Ghost extends GhostBacktracking {
 		}
 	}
 	
-	private void load_image(int i) throws IOException {
+	public void load_image(int i) throws IOException {
 		switch(i) {
 			case 0:
 				ghost_image = ImageIO.read(new File("C:/Users/jdmon/OneDrive/Escritorio/Paceman File/Paceman/src/paquete/Blinky.png"));
@@ -52,6 +56,8 @@ public class Ghost extends GhostBacktracking {
 			case 3:
 				ghost_image = ImageIO.read(new File("C:/Users/jdmon/OneDrive/Escritorio/Paceman File/Paceman/src/paquete/Pinky.png"));
 				break;
+			case 4:
+				ghost_image = ImageIO.read(new File("C:/Users/jdmon/OneDrive/Escritorio/Paceman File/Paceman/src/paquete/scary.png"));
 		}
 	}
 	
@@ -228,7 +234,7 @@ public class Ghost extends GhostBacktracking {
 	
 	private boolean wall_collision(double x2, double y2) {
 		for(int i=0; i<bounds.size(); i++) {
-			if(bounds.get(i).intersects(new Rectangle((int) (x2), (int) (y2), 20, 20))) {
+			if(bounds.get(i).intersects(new Rectangle((int) (x2), (int) (y2), width_ghost, heigth_ghost))) {
 				return true;
 			}
 		}
@@ -245,7 +251,11 @@ public class Ghost extends GhostBacktracking {
 	}
 	
 	public Rectangle getBounds() {
-		return new Rectangle((int ) (x+xa), (int) (y+ya), 20, 20);
+		return new Rectangle((int ) (x+xa), (int) (y+ya), width_ghost, heigth_ghost);
+	}
+	
+	public Rectangle getBounds_without_moving() {
+		return new Rectangle((int )x+5, (int)y, width_ghost-10, heigth_ghost-10);
 	}
 	
 	public void paint(Graphics2D g){
@@ -267,7 +277,14 @@ public class Ghost extends GhostBacktracking {
 	public void setY(double y) {
 		this.y = y;
 	}
-	
+
+	public int getWidth_ghost() {
+		return width_ghost;
+	}
+
+	public int getHeigth_ghost() {
+		return heigth_ghost;
+	}
 	
 	
 }

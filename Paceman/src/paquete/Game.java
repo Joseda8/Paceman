@@ -1,6 +1,7 @@
 package paquete;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -20,6 +21,8 @@ public class Game extends JPanel {
 	private Vector<Rectangle> bounds;
 	Pacman pacman = new Pacman(this);
 	ArrayList<Ghost> ghosts = new ArrayList<Ghost>();
+	
+	private int score = 0;
 
 	public Game() {
 		addKeyListener(new KeyListener() {
@@ -71,6 +74,13 @@ public class Game extends JPanel {
 		}
 		pacman.paint(g2d);
 		paint_ghosts(g2d);
+		paint_score(g2d);
+	}
+	
+	private void paint_score(Graphics2D g2d) {
+		g2d.setColor(Color.GRAY);
+		g2d.setFont(new Font("Verdana", Font.BOLD, 30));
+		g2d.drawString(String.valueOf("Puntaje: " + getScore()), 10, 665);
 	}
 	
 	private void paint_ghosts(Graphics2D g2d) {
@@ -182,6 +192,16 @@ public class Game extends JPanel {
 	public void game_over() {
 		JOptionPane.showMessageDialog(this, "Game Over", null, JOptionPane.YES_NO_OPTION);
 		System.exit(0);
+	}
+	
+	
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 
 	public static void main(String[] args) throws InterruptedException {

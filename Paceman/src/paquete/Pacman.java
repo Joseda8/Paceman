@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 
 public class Pacman {
 	private double x = 223;
@@ -17,9 +16,13 @@ public class Pacman {
 	private double xa = 0;
 	private double ya = 0;
 		
-	private double speed=2;
+	private double speed=3;
 	private Game game;
 	BufferedImage pacman_image;
+	private int width_pacman=25;
+	private int heigth_pacman=25;
+
+	private boolean power_on=false;
 	
 	private Vector<Rectangle> bounds;
 	PacDots pac_dots = new PacDots();
@@ -95,12 +98,22 @@ public class Pacman {
 	}
 	
 	private void eat_dot(int x, int y) {
-		if(new Rectangle(x, y, 20, 20).intersects(new Rectangle(220, 290, 30, 30)) && fruit.get_is_on()) {
+		if(new Rectangle(x, y, width_pacman, heigth_pacman).intersects(new Rectangle(220, 290, 30, 30)) && fruit.get_is_on()) {
 			fruit.setIs_on(false);
+			game.setScore(game.getScore()+100);
 		}else {
 			for(int i=0; i<pac_dots.getPac_dots().size(); i++) {
-				if(new Rectangle(x, y, 20, 20).intersects(new Rectangle(pac_dots.getPac_dots().get(i).getPos_x(), pac_dots.getPac_dots().get(i).getPos_y(), 20, 20))){
+				if(new Rectangle(x, y, width_pacman, heigth_pacman).intersects(new Rectangle(pac_dots.getPac_dots().get(i).getPos_x(), pac_dots.getPac_dots().get(i).getPos_y(), 20, 20))
+						&& !pac_dots.getPac_dots().get(i).isEated()){
 					pac_dots.getPac_dots().get(i).setEated(true);
+					if(pac_dots.getPac_dots().get(i).is_power()) {
+						this.power_on=true;
+						game.setScore(game.getScore()+10);
+						pacman_power t1 = new pacman_power (game);
+						t1.start();
+					}else {
+						game.setScore(game.getScore()+1);
+					}
 				}
 			}
 		}
@@ -108,14 +121,20 @@ public class Pacman {
 	
 	private boolean ghost_collision() {
 		for(int i=0; i<game.ghosts.size(); i++) {
-			if(new Rectangle((int)game.ghosts.get(i).getX(), (int)game.ghosts.get(i).getY(), 15, 15).intersects(getBounds())) {
-				game.game_over();
+			if(game.ghosts.get(i).getBounds_without_moving().intersects(getBounds_without_moving())) {
+				if(this.power_on) {
+					game.ghosts.get(i).setX(193);
+					game.ghosts.get(i).setY(224);
+					game.setScore(game.getScore()+50);
+				}else {
+					game.game_over();
+				}
 				return true;
 			}
 		}
 		return false;
 	}
-	
+		
 	private boolean wall_collision() {
 		for(int i=0; i<bounds.size(); i++) {
 			if(bounds.get(i).intersects(getBounds())) {
@@ -126,7 +145,11 @@ public class Pacman {
 	}
 	
 	public Rectangle getBounds() {
-		return new Rectangle((int ) (x+xa), (int) (y+ya), 20, 20);
+		return new Rectangle((int ) (x+xa), (int) (y+ya), width_pacman, heigth_pacman);
+	}
+	
+	public Rectangle getBounds_without_moving() {
+		return new Rectangle((int )x, (int)y, width_pacman, heigth_pacman);
 	}
 
 	public void paint(Graphics2D g){
@@ -148,6 +171,13 @@ public class Pacman {
 		return y;
 		//return ((int)y)/35;
 	}
-	
+
+	public boolean isPower_on() {
+		return power_on;
+	}
+
+	public void setPower_on(boolean power_on) {
+		this.power_on = power_on;
+	}
 	
 }
