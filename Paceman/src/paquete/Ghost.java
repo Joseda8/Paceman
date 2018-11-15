@@ -286,5 +286,8 @@ public class Ghost extends GhostBacktracking {
 		return heigth_ghost;
 	}
 	
-	
+	public void restart_position() {
+		x = 193;
+		y = 224;
+	}
 }

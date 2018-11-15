@@ -46,11 +46,9 @@ public class Game extends JPanel {
 				pacman.keyPressed(e);
 			}
 		});
-		this.ghosts.add(new Ghost(this, 0));
-		this.ghosts.add(new Ghost(this, 1));
-		this.ghosts.add(new Ghost(this, 2));
-		this.ghosts.add(new Ghost(this, 3));
 		this.bounds=set_bounds();
+		add_ghost(0);
+		add_ghost(3);
 		pacman = new Pacman(this);
 		setFocusable(true);
 	}
@@ -193,6 +191,10 @@ public class Game extends JPanel {
 		bounds.add(new Rectangle(390, 460, 35, 35));
 		
 		return bounds;
+	}
+	
+	public void add_ghost(int num_ghost) {
+		this.ghosts.add(new Ghost(this, num_ghost));
 	}
 	
 	public void game_over() {

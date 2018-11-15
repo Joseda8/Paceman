@@ -15,16 +15,19 @@ public class Pacman {
 	private double y = 433;
 	private double xa = 0;
 	private double ya = 0;
-		
-	private double speed=3;
-	private Game game;
+	
 	BufferedImage pacman_image;
+	BufferedImage pacman_lifes_image;
 	private int width_pacman=25;
 	private int heigth_pacman=25;
 
 	private boolean power_on=false;
+	private double speed=3;
+	private int lifes=2;
 	
 	private Vector<Rectangle> bounds;
+	
+	private Game game;
 	PacDots pac_dots;
 	Fruit fruit;
 	
@@ -45,6 +48,7 @@ public class Pacman {
 	
 	private void load_image() throws IOException {
 		pacman_image = ImageIO.read(new File("C:/Users/jdmon/OneDrive/Escritorio/Paceman File/Paceman/src/paquete/pacman.png"));
+		pacman_lifes_image = ImageIO.read(new File("C:/Users/jdmon/OneDrive/Escritorio/Paceman File/Paceman/src/paquete/pacman_life.png"));
 	}
 	
 	public void move(){
@@ -128,13 +132,25 @@ public class Pacman {
 					game.ghosts.get(i).setX(193);
 					game.ghosts.get(i).setY(224);
 					game.setScore(game.getScore()+50);
-				}else {
+				}else if(lifes==0){
 					game.game_over();
+				}else {
+					restart_level();
 				}
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	private void restart_level() {
+		lifes--;
+		x=223;
+		y=433;
+		pac_dots.set_dots();
+		for(int i=0; i<game.ghosts.size(); i++) {
+			game.ghosts.get(i).restart_position();
+		}
 	}
 		
 	private boolean wall_collision() {
@@ -156,6 +172,13 @@ public class Pacman {
 
 	public void paint(Graphics2D g){
 		g.drawImage(pacman_image, (int ) x, (int) y, null);
+		draw_lifes(g);
+	}
+	
+	private void draw_lifes(Graphics2D g) {
+		for(int i=0; i<lifes; i++) {
+			g.drawImage(pacman_lifes_image, 250+20*i, 650, null);
+		}
 	}
 	
 	public void set_speed(int speed) {
@@ -179,5 +202,15 @@ public class Pacman {
 	public void setPower_on(boolean power_on) {
 		this.power_on = power_on;
 	}
+
+	public int getLifes() {
+		return lifes;
+	}
+
+	public void setLifes(int lifes) {
+		this.lifes = lifes;
+	}
+	
+	
 	
 }
