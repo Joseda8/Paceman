@@ -135,22 +135,12 @@ public class Pacman {
 				}else if(lifes==0){
 					game.game_over();
 				}else {
-					restart_level();
+					game.restart_level();
 				}
 				return true;
 			}
 		}
 		return false;
-	}
-	
-	private void restart_level() {
-		lifes--;
-		x=223;
-		y=433;
-		pac_dots.set_dots();
-		for(int i=0; i<game.ghosts.size(); i++) {
-			game.ghosts.get(i).restart_position();
-		}
 	}
 		
 	private boolean wall_collision() {
@@ -209,6 +199,14 @@ public class Pacman {
 
 	public void setLifes(int lifes) {
 		this.lifes = lifes;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public void setY(double y) {
+		this.y = y;
 	}
 	
 	

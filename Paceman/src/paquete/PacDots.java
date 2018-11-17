@@ -28,6 +28,7 @@ public class PacDots {
 	}
 
 	public void set_dots() {
+		pac_dots.clear();
 		for(int i=0; i<13; i++) {
 			for(int j=0; j<17; j++) {
 				if(!collision(i*35+10, j*35+10) && !(i*35+10 == 220 && (j*35+10 == 430 || j*35+10 == 290))) {

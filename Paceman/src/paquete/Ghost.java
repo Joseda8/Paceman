@@ -18,6 +18,7 @@ public class Ghost extends GhostBacktracking {
 	private int width_ghost=25;
 	private int heigth_ghost=25;
 	
+	//Elección entre Blinky, Clyde, Inky y Pinky
 	private int ghost_num;
 	
 	private int count_control_move_var;
@@ -62,12 +63,19 @@ public class Ghost extends GhostBacktracking {
 	}
 	
 	public void move() {
-		if(ghost_num==0) {
+		switch(ghost_num) {
+		case 0:
 			way_finding();
-		}else if(ghost_num==1){
+			break;
+		case 1:
 			way_finding1();
-		}else{
-			way_finding((int) (Math.random() * (ghost_num*10+15)));
+			break;
+		case 2:
+			way_finding2();
+			break;
+		case 3:
+			way_finding((int) (Math.random() * (ghost_num*10+5)));
+			break;
 		}
 		if(!wall_collision()){
 			if(x + xa <= 17 && y + ya >= 240 && y + ya < 290){
@@ -84,6 +92,22 @@ public class Ghost extends GhostBacktracking {
 			if(y + ya > 6 && y + ya < 580) {
 				y = y + ya;
 			}
+		}
+	}
+	
+	private void way_finding() {
+		if(x<game.pacman.getX() && !wall_collision(x+speed, y)) {
+			xa = speed;
+			ya = 0;
+		}else if(x>game.pacman.getX() && !wall_collision(x-speed, y)) {
+			xa = speed*-1;
+			ya = 0;
+		}else if(y<game.pacman.getY() && !wall_collision(x, y+speed)) {
+			ya = speed;
+			xa = 0;
+		}else if(y>game.pacman.getY() && !wall_collision(x, y-speed)) {
+			ya = speed*-1;
+			xa = 0;
 		}
 	}
 	
@@ -111,6 +135,22 @@ public class Ghost extends GhostBacktracking {
 		}else {
 			count_control_move_var=0;
 			control_move_var=(int) (Math.random() * 4);
+		}
+	}
+	
+	private void way_finding2() {
+		if(x>game.pacman.getX()+100 && !wall_collision(x-speed, y)) {
+			xa = speed*-1;
+			ya = 0;
+		}else if(x<=game.pacman.getX()+100 && !wall_collision(x+speed, y)) {
+			xa = speed;
+			ya = 0;
+		}else if(y>=game.pacman.getY()+100 && !wall_collision(x, y-speed)) {
+			ya = speed*-1;
+			xa = 0;
+		}else if(y<game.pacman.getY()+100 && !wall_collision(x, y+speed)) {
+			ya = speed;
+			xa = 0;
 		}
 	}
 	
@@ -214,22 +254,6 @@ public class Ghost extends GhostBacktracking {
 			xa = 0;
 		}
 		*/
-	}
-	
-	private void way_finding() {
-		if(x<game.pacman.getX() && !wall_collision(x+speed, y)) {
-			xa = speed;
-			ya = 0;
-		}else if(x>game.pacman.getX() && !wall_collision(x-speed, y)) {
-			xa = speed*-1;
-			ya = 0;
-		}else if(y<game.pacman.getY() && !wall_collision(x, y+speed)) {
-			ya = speed;
-			xa = 0;
-		}else if(y>game.pacman.getY() && !wall_collision(x, y-speed)) {
-			ya = speed*-1;
-			xa = 0;
-		}
 	}
 	
 	private boolean wall_collision(double x2, double y2) {

@@ -15,6 +15,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+/*
+ * Clase main que instancia al resto
+ */
+
 @SuppressWarnings("serial")
 public class Game extends JPanel {
 	
@@ -27,6 +31,7 @@ public class Game extends JPanel {
 	
 	private int score = 0;
 
+	//Constructor de la clase
 	public Game() {
 		addKeyListener(new KeyListener() {
 			@Override
@@ -48,11 +53,14 @@ public class Game extends JPanel {
 		});
 		this.bounds=set_bounds();
 		add_ghost(0);
+		add_ghost(1);
+		add_ghost(2);
 		add_ghost(3);
 		pacman = new Pacman(this);
 		setFocusable(true);
 	}
 	
+	//Invoca los métodos de movimiento de pacman y de los fantasmas
 	private void move() {
 		pacman.move();
 		for(int i=0; i<ghosts.size(); i++) {
@@ -60,7 +68,7 @@ public class Game extends JPanel {
 		}
 	}
 	
-	
+	//Invoca los métodos paint de cada clase necesaria
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -81,6 +89,7 @@ public class Game extends JPanel {
 		paint_score(g2d);
 	}
 	
+	//Dibujar el puntaje
 	private void paint_score(Graphics2D g2d) {
 		g2d.setColor(Color.GRAY);
 		g2d.setFont(new Font("Verdana", Font.BOLD, 30));
@@ -93,6 +102,7 @@ public class Game extends JPanel {
 		}
 	}
 
+	//Crea el mapa del juego
 	public Vector<Rectangle> set_bounds(){
 		Vector<Rectangle> bounds = new Vector<Rectangle>(100);
 		
@@ -193,16 +203,28 @@ public class Game extends JPanel {
 		return bounds;
 	}
 	
+	//Método para agregar nuevos fantasmas
+	//Recibe por parámetro el fantasma que se quiere dibujar (Blinky, Inky, Pinky y Clyde)
 	public void add_ghost(int num_ghost) {
 		this.ghosts.add(new Ghost(this, num_ghost));
 	}
 	
+	//Vuelve a las condiciones iniciales del juego
+	public void restart_level() {
+		pacman.setLifes(pacman.getLifes()-1);
+		pacman.setX(223);
+		pacman.setY(433);
+		pac_dots.set_dots();		
+		for(int i=0; i<ghosts.size(); i++) {
+			ghosts.get(i).restart_position();
+		}
+	}
+	
+	//Dibujar en pantalla el mensaje de derrota
 	public void game_over() {
 		JOptionPane.showMessageDialog(this, "Game Over", null, JOptionPane.YES_NO_OPTION);
 		System.exit(0);
 	}
-	
-	
 
 	public int getScore() {
 		return score;

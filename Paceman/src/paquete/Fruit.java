@@ -7,6 +7,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/*
+ * Clase para el manejo de la fruta que aparece en medio del mapa
+ */
 public class Fruit {
 	private boolean is_on=false;
 	BufferedImage fruit_image;
