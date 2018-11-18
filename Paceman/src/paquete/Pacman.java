@@ -22,7 +22,7 @@ public class Pacman {
 	private int heigth_pacman=25;
 
 	private boolean power_on=false;
-	private double speed=3;
+	private double speed=1.5;
 	private int lifes=2;
 	
 	private Vector<Rectangle> bounds;
@@ -207,6 +207,16 @@ public class Pacman {
 
 	public void setY(double y) {
 		this.y = y;
+	}
+
+	public void setXa(double xa) {
+		this.xa = speed*xa;
+		ya=0;
+	}
+
+	public void setYa(double ya) {
+		this.ya = speed*ya;
+		xa=0;
 	}
 	
 	

@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -27,9 +28,12 @@ public class Game extends JPanel {
 	PacDots pac_dots = new PacDots();
 	Fruit fruit = new Fruit();
 	
+	Server socket_pacman;
+	
 	ArrayList<Ghost> ghosts = new ArrayList<Ghost>();
 	
 	private int score = 0;
+	private boolean sensor_game=false;
 
 	//Constructor de la clase
 	public Game() {
@@ -47,8 +51,18 @@ public class Game extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_E) {
 					System.exit(0);
+				}else if(e.getKeyCode() == KeyEvent.VK_S) {
+					if(!sensor_game) {
+						socket_move();
+						sensor_game=true;
+					}else{
+						close_socket(socket_pacman);
+						sensor_game=false;
+					}
 				}
-				pacman.keyPressed(e);
+				if(!sensor_game) {
+					pacman.keyPressed(e);
+				}
 			}
 		});
 		this.bounds=set_bounds();
@@ -58,6 +72,19 @@ public class Game extends JPanel {
 		add_ghost(3);
 		pacman = new Pacman(this);
 		setFocusable(true);
+	}
+	
+	private void socket_move() {
+		socket_pacman = new Server(this);
+		socket_pacman.start();
+	}
+	
+	private void close_socket(Server server) {
+		try {
+			server.close_socket();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	//Invoca los métodos de movimiento de pacman y de los fantasmas
